@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>返投招商 Skill</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --panel:#fff; --line:#e3e6ea; --line2:#eef0f3;
+    --ink:#1c2024; --ink2:#4a5259; --ink3:#858d95;
+    --brand:#1d4ed8; --brand-soft:#eff4ff; --brand-line:#c7d7fe;
+    --ok:#0f7b4f; --ok-soft:#eaf7f0; --ok-line:#bfe3d1;
+    --warn:#8a5a00; --warn-soft:#fdf5e4; --warn-line:#f0dcae;
+    --danger:#b3261e; --danger-soft:#fdeceb; --danger-line:#f0c0bd;
+    --r:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink); font-size:14px; line-height:1.65;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  .wrap{max-width:1300px; margin:0 auto; padding:26px 22px 70px;}
+
+  .kicker{display:inline-block; font-size:12px; letter-spacing:.06em; color:var(--brand);
+    background:var(--brand-soft); border:1px solid var(--brand-line); padding:3px 10px; border-radius:99px; margin-bottom:10px;}
+  h1{font-size:23px; margin:0 0 8px; letter-spacing:-.01em;}
+  .sub{color:var(--ink2); font-size:13.5px; max-width:860px; margin:0;}
+  .notice{margin-top:14px; padding:11px 14px; border-radius:var(--r); background:var(--warn-soft);
+    border:1px solid var(--warn-line); color:#6b4a00; font-size:13px;}
+  .notice b{color:#8a5a00;}
+
+  .grid{display:grid; grid-template-columns:322px 1fr; gap:18px; margin-top:20px; align-items:start;}
+  @media (max-width:940px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--r); margin-bottom:18px;}
+  .panel-hd{padding:12px 15px; border-bottom:1px solid var(--line2); font-weight:600; font-size:13.5px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .panel-bd{padding:15px;}
+
+  label.f{display:block; font-size:12.5px; color:var(--ink2); margin:0 0 6px; font-weight:600;}
+  select,input[type=text]{width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:7px;
+    font-size:13.5px; background:#fff; color:var(--ink); font-family:inherit;}
+  select:focus,input:focus{outline:2px solid var(--brand-line); outline-offset:-1px; border-color:var(--brand);}
+  .field{margin-bottom:13px;}
+  .hint{font-size:11.5px; color:var(--ink3); margin-top:5px; line-height:1.5;}
+  input[type=range]{width:100%; accent-color:var(--brand);}
+  .rlabels{display:flex; justify-content:space-between; font-size:11px; color:var(--ink3); margin-top:2px;}
+
+  button.run{width:100%; padding:11px; border:none; border-radius:8px; cursor:pointer; background:var(--brand);
+    color:#fff; font-size:14px; font-weight:600; font-family:inherit; transition:filter .15s;}
+  button.run:hover{filter:brightness(1.07);}
+  button.run:disabled{opacity:.55; cursor:default;}
+  .status{margin-top:10px; font-size:12px; color:var(--ink3); min-height:18px;}
+  .status.err{color:var(--danger);}
+
+  .steps{margin-top:12px;}
+  .step{display:flex; gap:9px; align-items:center; padding:5px 0; font-size:12.5px; color:var(--ink3);}
+  .dot{width:15px;height:15px;border-radius:50%;border:2px solid var(--line); flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center; font-size:9px; color:#fff; transition:all .2s;}
+  .step.done .dot{background:var(--ok); border-color:var(--ok);}
+  .step.done{color:var(--ink2);}
+  .step.active .dot{border-color:var(--brand); border-right-color:transparent; animation:spin .7s linear infinite;}
+  .step.active{color:var(--brand); font-weight:600;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .tabs{display:flex; gap:3px; padding:9px 11px 0; flex-wrap:wrap; border-bottom:1px solid var(--line2);}
+  .tab{padding:7px 11px; font-size:12.5px; border-radius:7px 7px 0 0; cursor:pointer; color:var(--ink2);
+    border:1px solid transparent; border-bottom:none; background:none; font-family:inherit; white-space:nowrap;}
+  .tab:hover{background:var(--line2);}
+  .tab.on{background:var(--brand-soft); color:var(--brand); border-color:var(--brand-line); font-weight:600;}
+  .tab .cnt{font-size:10.5px; background:var(--line2); color:var(--ink3); border-radius:99px; padding:0 5px; margin-left:4px;}
+  .tab.on .cnt{background:#fff;}
+
+  .out{padding:17px 19px 24px; min-height:430px;}
+  .out h3{font-size:15px; margin:0 0 12px;}
+  .out h4{font-size:13px; margin:18px 0 8px; color:var(--ink2);}
+  .out p{margin:0 0 10px; color:var(--ink2); font-size:13.5px;}
+
+  .layer{border:1px solid var(--line); border-radius:8px; padding:12px 13px; margin-bottom:11px; background:#fcfdfe;}
+  .layer .lh{display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; gap:8px;}
+  .layer .lh b{font-size:13.5px;}
+  .layer .segs{font-size:12.5px; color:var(--ink2); margin:4px 0;}
+  .layer .segs span{color:var(--ink3);}
+
+  .tag{display:inline-block; font-size:11px; padding:1px 7px; border-radius:99px; background:var(--line2);
+    color:var(--ink2); margin-right:5px;}
+  .tag.strong{background:var(--ok-soft); color:var(--ok); font-weight:600;}
+  .tag.solid{background:var(--brand-soft); color:var(--brand); font-weight:600;}
+  .tag.extend{background:var(--warn-soft); color:var(--warn); font-weight:600;}
+  .tag.fill{background:var(--danger-soft); color:var(--danger); font-weight:600;}
+  .tag.p0{background:var(--danger-soft); color:var(--danger); font-weight:600;}
+  .tag.p1{background:var(--warn-soft); color:var(--warn); font-weight:600;}
+  .tag.p2{background:var(--brand-soft); color:var(--brand); font-weight:600;}
+
+  .ev{display:inline-block; font-size:11px; font-weight:600; padding:1px 6px; border-radius:4px; min-width:18px; text-align:center;}
+  .ev.A{background:var(--ok-soft); color:var(--ok);}
+  .ev.B{background:var(--brand-soft); color:var(--brand);}
+  .ev.C{background:var(--warn-soft); color:var(--warn);}
+  .ev.D{background:var(--danger-soft); color:var(--danger);}
+  .conf{display:inline-block; font-size:11px; padding:1px 6px; border-radius:4px;}
+  .conf.hi{background:var(--ok-soft); color:var(--ok);}
+  .conf.mid{background:var(--warn-soft); color:var(--warn);}
+  .conf.lo{background:var(--danger-soft); color:var(--danger);}
+  .banned{display:inline-block; font-size:11px; padding:1px 6px; border-radius:4px;
+    background:var(--danger); color:#fff; font-weight:600;}
+
+  table{width:100%; border-collapse:collapse; font-size:12.5px; margin:8px 0 14px;}
+  th,td{text-align:left; padding:8px 9px; border-bottom:1px solid var(--line2); vertical-align:top;}
+  th{background:#fafbfc; color:var(--ink2); font-weight:600; font-size:12px; white-space:nowrap;}
+  td{color:var(--ink2);}
+  tr:hover td{background:#fbfcfd;}
+  tr.muted td{opacity:.62;}
+
+  .bar{display:inline-block; width:56px; height:6px; border-radius:99px; background:var(--line2);
+    overflow:hidden; vertical-align:middle; margin-right:6px;}
+  .bar i{display:block; height:100%; background:var(--brand);}
+
+  .card{border:1px solid var(--line); border-radius:8px; padding:13px 14px; margin-bottom:12px; background:#fcfdfe;}
+  .card.warn{border-color:var(--danger-line); background:var(--danger-soft);}
+  .card .hd{display:flex; justify-content:space-between; align-items:center; margin-bottom:9px; gap:8px; flex-wrap:wrap;}
+  .card .hd b{font-size:13.5px;}
+  .kv{font-size:12.5px; color:var(--ink2); margin:4px 0; line-height:1.6;}
+  .kv span{color:var(--ink3); display:inline-block; min-width:78px; vertical-align:top;}
+
+  .metrics{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:16px;}
+  .metric{background:#fafbfc; border:1px solid var(--line2); border-radius:8px; padding:11px 12px;}
+  .metric .l{font-size:11.5px; color:var(--ink3);}
+  .metric .v{font-size:19px; font-weight:700; letter-spacing:-.02em; margin-top:2px;}
+  .metric .v small{font-size:11px; font-weight:400; color:var(--ink3);}
+
+  .src{font-size:11.5px; color:var(--ink3); line-height:1.6; margin-top:6px;}
+  .src b{color:var(--ink2); font-weight:600;}
+  pre{background:#f7f8fa; border:1px solid var(--line2); border-radius:7px; padding:11px 13px;
+    font-size:12px; overflow:auto; margin:8px 0 14px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  code{background:#f1f3f5; padding:1px 5px; border-radius:4px; font-size:12px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .empty{color:var(--ink3); font-size:13px; padding:34px 0; text-align:center;}
+  .foot{margin-top:24px; font-size:12px; color:var(--ink3); border-top:1px solid var(--line); padding-top:14px; line-height:1.8;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="kicker">返投招商 Skill · v1.0</span>
+    <h1>输入城市与产业目标，输出五件套</h1>
+    <p class="sub">产业链分析 · 企业筛选 · 线索卡 · 沙龙方案 · 跟进清单。
+      城市政策与返投口径<b>独立配置</b>，换城市不改代码。</p>
+    <div class="notice">
+      <b>输出为线索池，不是决策结论。</b>所有企业信息均标注证据等级（A 官方 / B 媒体 / C 数据库 / D 推断），
+      D 级与低置信度条目自动标记<b>禁止对外</b>，须经投资团队交叉验证后方可使用。
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <aside>
+      <div class="panel">
+        <div class="panel-hd">输入配置</div>
+        <div class="panel-bd">
+          <div class="field">
+            <label class="f">城市 / 园区</label>
+            <select id="city"></select>
+            <div class="hint" id="cityHint"></div>
+          </div>
+          <div class="field">
+            <label class="f">产业目标</label>
+            <input type="text" id="industry" value="具身智能机器人">
+            <div class="hint" id="indHint"></div>
+          </div>
+          <div class="field">
+            <label class="f">返投口径（基金）</label>
+            <select id="fund"></select>
+            <div class="hint" id="fundHint"></div>
+          </div>
+          <div class="field">
+            <label class="f">检索深度</label>
+            <input type="range" id="depth" min="1" max="3" step="1" value="2">
+            <div class="rlabels"><span>轻量</span><span>标准</span><span>重度</span></div>
+            <div class="hint" id="depthHint">决定抓取范围：公告源 + 东财公告，回溯 540 天</div>
+          </div>
+          <div class="field" style="margin-bottom:14px;">
+            <label style="display:flex; align-items:flex-start; gap:8px; font-size:12.5px; color:var(--ink2); font-weight:600; cursor:pointer;">
+              <input type="checkbox" id="live" style="margin-top:3px; width:auto; accent-color:var(--brand);">
+              <span>实时抓取在线数据
+                <div class="hint" style="font-weight:400; margin-top:3px;">
+                  从巨潮资讯、东方财富抓取真实的企业公告与媒体报道（A/B 级证据）。
+                  约需 10–40 秒，取决于检索深度。不勾选则用内置模板数据。
+                </div>
+              </span>
+            </label>
+          </div>
+          <button class="run" id="runBtn">运行 Skill</button>
+          <div class="status" id="status"></div>
+          <div class="steps" id="steps">
+            <div class="step" data-s="0"><span class="dot"></span><span>配置加载与校验</span></div>
+            <div class="step" data-s="1"><span class="dot"></span><span>S1 产业链分析</span></div>
+            <div class="step" data-s="2"><span class="dot"></span><span>S2 企业筛选</span></div>
+            <div class="step" data-s="3"><span class="dot"></span><span>S3 线索卡</span></div>
+            <div class="step" data-s="4"><span class="dot"></span><span>S4 沙龙方案</span></div>
+            <div class="step" data-s="5"><span class="dot"></span><span>S5 跟进清单</span></div>
+            <div class="step" data-s="6"><span class="dot"></span><span>EvidenceGuard 证据守卫</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd">配置来源（可追溯）</div>
+        <div class="panel-bd" id="srcBox">
+          <div class="empty" style="padding:12px 0;">运行后显示</div>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <div class="panel">
+        <div class="tabs" id="tabs">
+          <button class="tab on" data-t="chain">产业链分析</button>
+          <button class="tab" data-t="screen">企业筛选<span class="cnt" id="c-screen">0</span></button>
+          <button class="tab" data-t="leads">线索卡<span class="cnt" id="c-leads">0</span></button>
+          <button class="tab" data-t="salon">沙龙方案</button>
+          <button class="tab" data-t="followup">跟进清单</button>
+          <button class="tab" data-t="signals">实时信号<span class="cnt" id="c-signals">0</span></button>
+          <button class="tab" data-t="sources">数据源</button>
+          <button class="tab" data-t="city">城市政策</button>
+          <button class="tab" data-t="report">运行报告</button>
+        </div>
+        <div class="out" id="out">
+          <div class="empty">← 选择城市与产业目标，点击「运行 Skill」</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="foot">
+    <b>数据来源</b>：亦庄 —— 人民日报海外版/央视网（2026-02）、北京市政府网（2025-08）、数字中国（2025-08）；
+    深圳 —— 深圳市科技创新局（2026-06）；苏州 —— 苏州市人民政府《支持具身智能机器人产业创新发展的若干措施》（2025-04）；
+    陕西 —— 陕西省人民政府（2026-06）、陕西省科学技术厅（2026-05）。
+    <br>
+    <b>企业数据</b>来自公开报道，<b>未接入企查查等商业数据源</b>；对外使用前必须由投资团队交叉验证。
+    本工具用于内部可行性讨论，不构成投资或招商建议。
+  </div>
+</div>
+
+<script src="fallback.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const api = (p) => fetch(p).then(r => r.json());
+
+let OPTS = null, RESULT = null, curTab = 'chain', OFFLINE = false;
+
+/* 演示模式：?demo=1 时界面不显示外置配置文件路径。
+   用途 —— 对外演示录屏时，左栏提示在**第一帧**就已渲染，
+   靠运行时注入 JS 去替换永远会留下几帧未脱敏画面。
+   在渲染源头就脱敏，才是零暴露窗口。 */
+const DEMO = new URLSearchParams(location.search).has('demo');
+
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function evBadge(l){ return `<span class="ev ${esc(l)}">${esc(l)}</span>`; }
+function confBadge(c){
+  const m = {'中高':'hi','中':'mid','低':'lo'};
+  return `<span class="conf ${m[c]||'lo'}">${esc(c||'—')}</span>`;
+}
+function tagFor(判断){
+  const m = {'强链':'strong','固链':'solid','延链':'extend','补链':'fill'};
+  return `<span class="tag ${m[判断]||''}">${esc(判断)}</span>`;
+}
+function prioTag(p){ return `<span class="tag ${String(p).toLowerCase()}">${esc(p)}</span>`; }
+
+/* ---------------------------------------------------- 初始化 */
+async function init(){
+  let opts = null;
+  try{
+    const r = await api('/api/options');
+    if(r && r.ok) opts = r.options;
+  }catch(e){ /* 后端不可用，走内置数据 */ }
+
+  if(!opts){
+    if(!window.FALLBACK){ $('#status').textContent = '配置加载失败：后端不可用且无内置数据'; return; }
+    opts = window.FALLBACK.options; OFFLINE = true;
+  }
+  OPTS = opts;
+
+  $('#city').innerHTML = OPTS.cities.map(c=>`<option>${esc(c)}</option>`).join('');
+  $('#fund').innerHTML = '<option value="">（不指定）</option>' +
+    OPTS.funds.map(f=>`<option>${esc(f)}</option>`).join('');
+  $('#fund').value = OPTS.funds[0] || '';
+
+  $('#indHint').textContent = '已内置产业链框架：' + OPTS.industries.join('、');
+
+  if(OPTS.cities.includes('深圳')) $('#city').value = '深圳';
+  updateHints();
+  $('#city').addEventListener('change', updateHints);
+  $('#fund').addEventListener('change', updateHints);
+  $('#depth').addEventListener('input', updateHints);
+
+  if(OFFLINE){
+    $('#status').textContent = '已载入内置数据（后端未运行，界面与数据完整可浏览）';
+  }
+}
+
+function updateHints(){
+  $('#cityHint').textContent = DEMO
+    ? `政策配置：外置配置文件 → ${$('#city').value}`
+    : `政策配置：config/cities.yaml → ${$('#city').value}`;
+  $('#fundHint').textContent = '口径未确认时，工具不输出优先级排序';
+  const D = {
+    1: '只抓公告源（巨潮），回溯 365 天 —— 最快',
+    2: '抓公告源（巨潮 + 东财公告），回溯 540 天',
+    3: '抓全部源（含媒体资讯），回溯 730 天 —— 最全，能覆盖非上市公司'
+  };
+  const el = $('#depthHint');
+  if(el) el.textContent = '决定抓取范围：' + D[$('#depth').value];
+}
+
+/* ---------------------------------------------------- 运行 */
+const DEPTH = {1:'light', 2:'standard', 3:'deep'};
+
+$('#runBtn').onclick = async () => {
+  const btn = $('#runBtn');
+  btn.disabled = true; btn.textContent = '运行中…';
+  $('#status').textContent = ''; $('#status').className = 'status';
+
+  const steps = document.querySelectorAll('.step');
+  steps.forEach(s=>{ s.className='step'; s.querySelector('.dot').textContent=''; });
+  let i = 0;
+  const timer = setInterval(()=>{
+    if(i>0){ steps[i-1].className='step done'; steps[i-1].querySelector('.dot').textContent='✓'; }
+    if(i < steps.length){ steps[i].className='step active'; i++; }
+    else clearInterval(timer);
+  }, 220);
+
+  try{
+    const qs = new URLSearchParams({
+      city: $('#city').value,
+      industry: $('#industry').value,
+      fund: $('#fund').value,
+      depth: DEPTH[$('#depth').value],
+      live: $('#live').checked ? '1' : '0'
+    });
+
+    let res = null;
+    try{
+      if($('#live').checked) $('#status').textContent = '正在抓取在线数据…（约 30–40 秒）';
+      const r = await api('/api/run?' + qs.toString());
+      if(r && r.ok) res = r.result;
+      else throw new Error((r && r.error) || '后端返回异常');
+    }catch(e){
+      // 后端不可用 → 用内置数据。
+      // ⚠️ 关键：查不到对应组合时**必须报错，绝不回退到别的城市**，
+      //    否则会出现「深圳的政策 + 亦庄的企业」这种静默串数据。
+      if(window.FALLBACK){
+        const city = $('#city').value, fund = $('#fund').value;
+        const key = `${city}||${fund}`;
+        const f = window.FALLBACK.runs[key];
+        if(!f){
+          $('#status').textContent =
+            `后端未运行，且内置数据中没有「${city} + ${fund || '不指定基金'}」这一组合。`
+            + `请启动后端服务后再试。`;
+          $('#status').className = 'status err';
+          return;
+        }
+        res = Object.assign({}, f, { cityCfg: window.FALLBACK.cities[city] || {} });
+        OFFLINE = true;
+      } else { throw e; }
+    }
+
+    clearInterval(timer);
+    steps.forEach(s=>{ s.className='step done'; s.querySelector('.dot').textContent='✓'; });
+
+    RESULT = res;
+    $('#status').textContent = (OFFLINE ? '完成（内置数据） · ' : '完成 · ')
+      + RESULT.report.运行时间
+      + (RESULT.report.耗时秒 != null ? `　耗时 ${RESULT.report.耗时秒}s` : '');
+    $('#c-screen').textContent = RESULT.artifacts.screen.企业.length;
+    $('#c-leads').textContent  = RESULT.artifacts.leads.卡片.length;
+    $('#c-signals').textContent = (RESULT.report.原始信号流||[]).length;
+    renderSrc();
+    render();
+
+  }catch(e){
+    clearInterval(timer);
+    $('#status').textContent = '运行失败：' + e.message;
+    $('#status').className = 'status err';
+    $('#out').innerHTML = `<div class="empty">运行失败：${esc(e.message)}</div>`;
+  }
+  btn.disabled = false; btn.textContent = '重新运行';
+};
+
+function renderSrc(){
+  const cs = RESULT.report.配置来源;
+  $('#srcBox').innerHTML = Object.entries(cs).map(([k,v])=>
+    `<div class="kv"><span>${esc(k)}</span><code>${esc(v)}</code></div>`).join('')
+    + `<div class="src" style="margin-top:10px;">
+       运行模式：<b>${OFFLINE ? '内置数据（后端未运行）' : esc(RESULT.report.运行模式)}</b><br>
+       数据来源见页脚，每条企业信息均带证据等级。</div>`;
+}
+
+/* ---------------------------------------------------- 渲染 */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.onclick = async ()=>{ curTab = t.dataset.t;
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on', x===t));
+    if(curTab === 'sources'){ await loadSources(); }
+    render(); };
+});
+
+function render(){
+  if(!RESULT){ return; }
+  const a = RESULT.artifacts, r = RESULT.report;
+  const R = {
+    chain: rChain, screen: rScreen, leads: rLeads,
+    salon: rSalon, followup: rFollowup, signals: rSignals,
+    sources: rSources, city: rCity, report: rReport
+  };
+  $('#out').innerHTML = R[curTab] ? R[curTab](a, r) : '';
+
+  /* 对外演示版脱敏钩子 —— 必须紧贴上面的 innerHTML 赋值。
+     理由：标签页切换是 async 的（sources 要 await 加载数据），
+     由外部「点击后再调遮蔽」会留下约 0.7 秒未脱敏窗口，
+     实测泄漏了完整的 12 个数据源清单（含成本/合规说明）与全部 10 个检索词。
+     放在这里，「渲染」与「脱敏」在同一同步块内完成，窗口为零。
+     未注入 __maskClient 时（即正常使用）本行不产生任何行为。 */
+  if (window.__maskClient) { try { window.__maskClient(); } catch(e){} }
+}
+
+/* --- 数据源 --- */
+let SOURCES = null;
+async function loadSources(){
+  if(SOURCES) return SOURCES;
+  try{
+    const r = await api('/api/datasources');
+    if(r && r.ok) SOURCES = r.sources;
+  }catch(e){}
+  if(!SOURCES && window.FALLBACK_SOURCES) SOURCES = window.FALLBACK_SOURCES;
+  return SOURCES;
+}
+
+function rSources(){
+  const live = RESULT && RESULT.report.在线抓取;
+  const list = SOURCES || [];
+  const rows = list.map(s=>`<tr class="${s.可用?'':'muted'}">
+      <td><b>${esc(s.名称)}</b>${s.可用?' <span class="conf hi">已接入</span>':' <span class="conf lo">待接入</span>'}</td>
+      <td>${evBadge(s.证据等级)}</td>
+      <td>${esc(s.成本)}</td>
+      <td>${esc(s.合规)}</td>
+      <td>${esc(s.需要凭证||'—')}</td>
+    </tr>`).join('');
+
+  const liveBox = (live && live.已启用) ? `
+    <h4>本次在线抓取</h4>
+    <p>检索词：${(live.检索词||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}
+       ｜回溯 ${live.回溯天数} 天</p>
+    <table><tr><th>数据源</th><th>证据等级</th><th>返回</th><th>状态</th></tr>
+      ${(live.各源状态||[]).map(l=>`<tr><td>${esc(l['数据源'])}</td><td>${evBadge(l['证据等级'])}</td>
+        <td>${l['返回条数']}</td><td>${esc(l['状态'])}</td></tr>`).join('')}</table>` : '';
+
+  return `<h3>数据源清单</h3>
+    <p>工具支持多个数据源，按<b>证据等级</b>与<b>成本</b>分级。已接入的可自动抓取，待接入的需凭证或按地区适配。</p>
+    <table><tr><th>数据源</th><th>证据</th><th>成本</th><th>合规说明</th><th>接入条件</th></tr>${rows}</table>
+    ${liveBox}
+    <div class="notice">
+      <b>实测结论（2026-09-29 验证）：</b>
+      巨潮资讯接口可用，返回上市公司扩产公告（A 级证据）；
+      但<b>细分环节的信号极稀疏</b>——8 个环节词、2 年内仅 6 条相关公告、含扩产信号仅 2 条。
+      原因是<b>细分环节厂商多为非上市公司</b>，而招商目标恰恰大量是这类企业。
+      所以巨潮只能作补充源，主力应是<b>环评公示 + 招投标 + 商业数据库</b>。
+    </div>`;
+}
+
+/* --- 产业链分析 --- */
+function rChain(a){
+  const c = a.chain;
+  const layers = c.层级.map(L=>{
+    const segs = (L.环节||[]).map(s=>`<span class="tag">${esc(s)}</span>`).join('');
+    const locals = (L.本地代表企业||[]).length
+      ? `<div class="segs"><span>本地代表：</span>${L.本地代表企业.map(esc).join('、')}</div>` : '';
+    const cond = L.本地条件 ? `<div class="segs"><span>本地条件：</span>${esc(L.本地条件)}</div>` : '';
+    return `<div class="layer">
+      <div class="lh"><b>${esc(L.层级)}</b>${tagFor(L.判断)}</div>
+      <div class="segs">${segs}</div>${locals}${cond}</div>`;
+  }).join('');
+
+  const prio = c.补链优先级.map(p=>`<tr>
+      <td>${prioTag(p.优先级)}</td><td><b>${esc(p.环节)}</b></td><td>${esc(p.理由)}</td></tr>`).join('');
+
+  return `<h3>${esc(c.标题)}</h3>
+    <p>分析框架：<b>${esc(c.框架)}</b></p>
+    ${layers}
+    <h4>补链优先级建议</h4>
+    <table><tr><th>优先级</th><th>环节</th><th>理由</th></tr>${prio}</table>
+    <h4>结论</h4><p>${esc(c.结论)}</p>
+    <div class="src"><b>数据来源：</b>${(c.数据来源||[]).map(esc).join('；') || '见页脚'}</div>`;
+}
+
+/* --- 企业筛选 --- */
+function rScreen(a){
+  const s = a.screen;
+  const sorted = s.已排序 !== false;
+  const rows = s.企业.map(c=>{
+    // 口径未确认时不给匹配度 —— 避免任何形式的优先级暗示
+    const bar = (c._匹配度 === null || c._匹配度 === undefined)
+      ? '<span class="muted" style="white-space:nowrap">未排序</span>'
+      : `<span class="bar"><i style="width:${c._匹配度}%"></i></span>${c._匹配度}`;
+    const reasons = (c._打分理由||[]).map(esc).join(' · ');
+    const src = c._在线 ? ' <span class="conf mid">在线</span>' : '';
+    return `<tr class="${c._禁止对外?'muted':''}">
+      <td><b>${esc(c.名称)}</b>${src}${c._禁止对外?' <span class="banned">禁止对外</span>':''}
+        ${reasons?`<div class="src" style="margin-top:3px;">${reasons}</div>`:''}</td>
+      <td>${esc(c.环节||'待归类')}</td>
+      <td>${esc(c.所在地||'—')}</td>
+      <td>${esc(c.扩张信号||'待核')}</td>
+      <td>${esc(c.信号类型||'—')}</td>
+      <td>${evBadge(c.证据等级)}</td>
+      <td>${confBadge(c.置信度)}</td>
+      <td>${bar}</td></tr>`;
+  }).join('');
+
+  const gate = sorted ? '' : `
+    <div class="notice" style="border-left-color:var(--danger);">
+      <b>⚠️ 返投口径未确认 —— 本页不做优先级排序。</b>
+      企业按「环节 + 名称」排列，<b>不显示匹配度、不给出推荐顺序</b>。
+      理由：口径没确认之前，「哪条线索值得追」这个问题无法回答。
+      ${esc(RESULT.report.优先级排序.说明)}
+    </div>`;
+
+  return `<h3>${esc(s.标题)}</h3>
+    ${gate}
+    <div class="metrics">
+      <div class="metric"><div class="l">候选池</div><div class="v">${s.候选池}</div></div>
+      <div class="metric"><div class="l">进入打分</div><div class="v">${s.进入打分}</div></div>
+      <div class="metric"><div class="l">可推荐</div><div class="v">${s.推荐}</div></div>
+      <div class="metric"><div class="l">禁止对外</div><div class="v" style="color:var(--danger)">${s.进入打分 - s.推荐}</div></div>
+    </div>
+    <table><tr><th>企业</th><th>环节</th><th>所在地</th><th>扩张信号</th><th>信号类型</th><th>证据</th><th>置信度</th><th>匹配度</th></tr>
+    ${rows}</table>
+    <div class="notice"><b>匹配度仅反映「环节优先级 + 证据强度」。</b>
+    标「禁止对外」的条目证据等级为 D、或置信度为低，<b>不得用于对外邀约</b>，须先接入商业数据源核实。</div>`;
+}
+
+/* --- 实时信号（原始信号流）--- */
+function rSignals(a, r){
+  const sig = r.原始信号流 || [];
+  const live = r.在线抓取 || {};
+  if(!live.已启用){
+    return `<h3>实时信号</h3>
+      <div class="notice">本次运行<b>未启用在线抓取</b>。
+      勾选左侧「实时抓取在线数据」后重新运行，即可抓取真实数据。</div>`;
+  }
+  const rows = sig.map(s=>{
+    const src = (s.证据来源||[])[0] || '';
+    const m = src.match(/^(.*?)，(\d{4}-\d{2}-\d{2})，(.*)$/);
+    const media = m ? m[1] : src;
+    const dt = m ? m[2] : '';
+    const url = m ? m[3] : '';
+    return `<tr>
+      <td style="white-space:nowrap">${esc(dt)}</td>
+      <td>${evBadge(s.证据等级)}</td>
+      <td>${esc(s.信号类型||'—')}</td>
+      <td>${esc(s.标题)}
+        ${media?`<div class="src" style="margin-top:3px;">${esc(media)}${
+          url?` · <a href="${esc(url)}" target="_blank" rel="noopener">原文</a>`:''}</div>`:''}</td>
+    </tr>`;
+  }).join('');
+
+  return `<h3>实时信号 · 原始信号流</h3>
+    <p>这些是本次从公开源抓到的<b>真实信号</b>。其中能可靠识别出企业名的已并入
+      「企业筛选」页；识别不出的<b>不做脑补</b>，原文列在这里供人工判断。</p>
+    <div class="metrics">
+      <div class="metric"><div class="l">识别出企业</div><div class="v">${live.企业线索数||0}</div></div>
+      <div class="metric"><div class="l">原始信号</div><div class="v">${sig.length}</div></div>
+      <div class="metric"><div class="l">回溯天数</div><div class="v">${live.回溯天数||'—'}</div></div>
+      <div class="metric"><div class="l">检索词</div><div class="v">${(live.检索词||[]).length}</div></div>
+    </div>
+    ${sig.length ? `<div style="overflow:auto;"><table>
+      <tr><th>日期</th><th>证据</th><th>信号类型</th><th>标题与来源</th></tr>${rows}</table></div>`
+    : '<p>本次未抓到符合条件的信号。</p>'}
+    <h4>数据源状态</h4>
+    <table><tr><th>数据源</th><th>证据</th><th>返回</th><th>状态</th></tr>
+      ${(live.各源状态||[]).map(l=>`<tr><td>${esc(l['数据源'])}</td><td>${evBadge(l['证据等级'])}</td>
+        <td>${l['返回条数']}</td><td>${esc(l['状态'])}</td></tr>`).join('')}</table>`;
+}
+
+/* --- 线索卡 --- */
+function rLeads(a){
+  const cards = a.leads.卡片.map(c=>`<div class="card ${c.禁止对外?'warn':''}">
+    <div class="hd"><b>${esc(c.线索编号)} ｜ ${esc(c.企业)}</b>
+      <span>${evBadge(c.证据等级)} ${confBadge(c.置信度)}${c.禁止对外?' <span class="banned">禁止对外</span>':''}</span></div>
+    <div class="kv"><span>触发信号</span>${esc(c.触发信号||'待核')}</div>
+    <div class="kv"><span>信号类型</span><b>${esc(c.信号类型||'—')}</b></div>
+    <div class="kv"><span>可能需求</span>${esc(c.可能需求)}</div>
+    <div class="kv"><span>匹配园区</span>${esc(c.匹配园区)}</div>
+    <div class="kv"><span>对接理由</span>${esc(c.对接理由)}</div>
+    <div class="kv"><span>风险</span>${esc(c.风险||'待补充')}</div>
+    <div class="kv"><span>证据链接</span>${esc(c.证据链接)}</div>
+    <div class="kv"><span>下一步</span>${esc(c.下一步||'待补充')}</div>
+    ${c.禁止对外?`<div class="kv" style="color:var(--danger)"><span>拦截原因</span>${esc(c.拦截原因)}</div>`:''}
+  </div>`).join('');
+
+  return `<h3>${esc(a.leads.标题)}</h3>
+    <p>排序状态：<b>${a.leads.已排序?'已按匹配度排序':'未排序（返投口径未确认）'}</b>
+      <span class="src">— ${esc(RESULT.report.优先级排序.说明)}</span></p>
+    ${cards}`;
+}
+
+/* --- 沙龙方案 --- */
+function rSalon(a){
+  const s = a.salon;
+  const agenda = s.议程.map(x=>`<tr><td>${esc(x.时段)}</td><td>${esc(x.环节)}</td><td>${esc(x.主讲)}</td></tr>`).join('');
+  const people = Object.entries(s.人群配比||{}).map(([k,v])=>`<span class="tag">${esc(k)} ${esc(v)}</span>`).join('');
+  return `<h3>${esc(s.标题)}</h3>
+    <p><b>主题：</b>${esc(s.主题)}</p>
+    <p><b>定位：</b>${esc(s.定位)}　<b>规模上限：</b>${s.规模上限} 人</p>
+    <p><b>人群配比：</b>${people}</p>
+    <p><b>时间地点：</b>${esc(s.时间地点)}</p>
+    <h4>议程</h4>
+    <table><tr><th>时段</th><th>环节</th><th>主讲</th></tr>${agenda}</table>
+    <h4>邀约理由模板</h4>
+    <div class="card" style="font-size:13px;">${esc(s.邀约理由模板)}</div>
+    <h4>评价指标</h4>
+    <p>${(s.评价指标||[]).map(x=>'✅ '+esc(x)).join('<br>')}</p>
+    <p><b>明确不考核：</b>${(s.明确不考核||[]).map(x=>'❌ '+esc(x)).join('　')}</p>`;
+}
+
+/* --- 跟进清单 --- */
+function rFollowup(a){
+  const f = a.followup;
+  const head = f.字段.map(h=>`<th>${esc(h)}</th>`).join('');
+  const rows = f.行.map(r=>`<tr>${f.字段.map(h=>{
+    let v = r[h] ?? '';
+    if(h==='置信度') v = confBadge(v);
+    else v = esc(v);
+    return `<td>${v}</td>`;
+  }).join('')}</tr>`).join('');
+  return `<h3>跟进清单</h3>
+    <p>共 ${f.行.length} 行。字段结构按多维表格设计，可直接复制到表格工具中使用。</p>
+    <div style="overflow:auto;"><table><tr>${head}</tr>${rows}</table></div>
+    <div class="notice"><b>校验规则已生效：</b>
+    ① 截止日按「5 个工作日」自动生成，不留空；
+    ② 缺下一步动作的行，阶段自动置为「待指定动作」且不得推进；
+    ③ 证据链接为空的记录标记「待补充」；
+    ④ 置信度为低的记录不得推进到「已触达」之后。</div>`;
+}
+
+/* --- 城市政策 --- */
+function rCity(a){
+  const name = RESULT.report.城市;
+  const c = RESULT.cityCfg || {};
+  const list = (v) => Array.isArray(v) ? v.map(x=>`<span class="tag">${esc(x)}</span>`).join('')
+    : (v && v.清单 ? v.清单.map(x=>`<span class="tag">${esc(x)}</span>`).join('') : esc(v||'—'));
+
+  const 政策文件 = (c.政策文件||[]).map(p=>{
+    if(typeof p === 'string') return `<div class="kv">· ${esc(p)}</div>`;
+    return `<div class="kv">· <b>${esc(p.名称)}</b>${p.发布?'（'+esc(p.发布)+'）':''}
+      ${p.要点?'<br><span>要点</span>'+esc(p.要点):''}
+      ${p.来源?'<br><span>来源</span>'+esc(p.来源)+' '+evBadge(p.等级||'B'):''}</div>`;
+  }).join('');
+
+  const 待核 = (c.待核项||[]).map(x=>`<li>${esc(x)}</li>`).join('');
+
+  return `<h3>${esc(c.名称 || name)} · 城市政策配置</h3>
+    <div class="metrics">
+      <div class="metric"><div class="l">筹码类型</div><div class="v" style="font-size:15px">${esc(c.筹码类型||'—')}</div></div>
+      <div class="metric" style="grid-column:span 3"><div class="l">一句话定位</div>
+        <div class="v" style="font-size:13px;font-weight:400;line-height:1.6">${esc(c.一句话定位||'—')}</div></div>
+    </div>
+    <p><b>招商路径：</b>${esc(c.招商路径||'—')}</p>
+    <h4>政策文件</h4>${政策文件 || '<p>—</p>'}
+    <h4>政策工具</h4><p>${list(c.政策工具)}</p>
+    <h4>稀缺筹码</h4><p>${list(c.稀缺筹码)}</p>
+    ${c.产业基础?`<h4>产业基础</h4><div class="kv">${Object.entries(c.产业基础).map(([k,v])=>
+      `<span>${esc(k)}</span>${esc(Array.isArray(v)?v.join('、'):v)}<br>`).join('')}</div>`:''}
+    ${c.重点支持环节?`<h4>重点支持环节</h4><p>${list(c.重点支持环节)}</p>`:''}
+    <h4>邀约理由模板</h4>
+    <div class="card" style="font-size:13px;">${esc(c.邀约理由模板||'—')}</div>
+    <h4>待核项（已知不确定的地方）</h4>
+    <ul style="font-size:12.5px;color:var(--ink2);margin:0 0 12px;padding-left:20px;">${待核||'<li>无</li>'}</ul>
+    <div class="src"><b>配置来源：</b>${(c.来源汇总||[]).map(esc).join('；') || '见页脚'}</div>`;
+}
+
+/* --- 运行报告 --- */
+function rReport(a, r){
+  const g = r.证据守卫;
+  const tok = r.LLM模式预估token;
+  const blocked = g.拦截.length ? g.拦截.map(x=>`<li>${esc(x)}</li>`).join('') : '<li>无</li>';
+  const warned  = g.打标.length ? g.打标.map(x=>`<li>${esc(x)}</li>`).join('') : '<li>无</li>';
+  return `<h3>运行报告</h3>
+    <div class="metrics">
+      <div class="metric"><div class="l">运行模式</div><div class="v" style="font-size:12.5px">${esc(r.运行模式)}</div></div>
+      <div class="metric"><div class="l">耗时</div><div class="v">${r.耗时秒 ?? '—'}<small> 秒</small></div></div>
+      <div class="metric"><div class="l">证据守卫检查</div><div class="v">${g.检查条数}<small> 条</small></div></div>
+      <div class="metric"><div class="l">拦截 / 打标</div>
+        <div class="v"><span style="color:var(--danger)">${g.拦截数}</span> / <span style="color:var(--warn)">${g.打标数}</span></div></div>
+    </div>
+    ${r.在线抓取 ? `<h4>在线抓取</h4>
+      <p>状态：<b>${r.在线抓取.已启用?'已启用':'未启用'}</b>
+      ${r.检索深度?`｜检索深度：<b>${esc(r.检索深度)}</b>`:''}
+      ${r.在线抓取.已启用?`｜回溯 ${r.在线抓取.回溯天数} 天｜检索词：${(r.在线抓取.检索词||[]).map(esc).join('、')}`:''}</p>
+      ${(r.在线抓取.各源状态||[]).length?`<table><tr><th>数据源</th><th>证据</th><th>返回</th><th>状态</th></tr>
+        ${r.在线抓取.各源状态.map(l=>`<tr><td>${esc(l['数据源'])}</td><td>${evBadge(l['证据等级'])}</td>
+          <td>${l['返回条数']}</td><td>${esc(l['状态'])}</td></tr>`).join('')}</table>`:''}` : ''}
+    <h4>优先级排序门控</h4>
+    <p>${r.优先级排序.允许?'<b style="color:var(--ok)">允许排序</b>':'<b style="color:var(--danger)">禁止排序</b>'}
+       —— ${esc(r.优先级排序.说明)}</p>
+    <h4>拦截明细（阻断项）</h4><ul style="font-size:12.5px;color:var(--ink2);padding-left:20px;">${blocked}</ul>
+    <h4>打标明细（警告项）</h4><ul style="font-size:12.5px;color:var(--ink2);padding-left:20px;">${warned}</ul>
+    <h4>Token 用量</h4>
+    <p>离线模式<b>不消耗 token</b>。切换 LLM 模式时预估：输入 <b>${tok.输入.toLocaleString()}</b>、
+      输出 <b>${tok.输出.toLocaleString()}</b> token。
+      <span class="src">（真实 Agent 循环下输入 token 约为此值 2–9 倍，需开启 prompt caching）</span></p>
+    <h4>配置来源</h4>
+    <pre>${esc(JSON.stringify(r.配置来源, null, 2))}</pre>
+    <h4>运行元数据</h4>
+    <pre>${esc(JSON.stringify({运行时间:r.运行时间,城市:r.城市,产业:r.产业,基金:r.基金,版本:RESULT.meta.version}, null, 2))}</pre>
+    <div class="notice">${esc(RESULT.meta.disclaimer)}</div>`;
+}
+
+init();
+</script>
+</body>
+</html>

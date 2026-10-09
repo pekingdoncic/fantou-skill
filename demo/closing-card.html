@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1600px; height:900px; overflow:hidden; }
+  body {
+    font-family:"PingFang SC","Hiragino Sans GB","Helvetica Neue",sans-serif;
+    background:#eef2f8;
+    background-image:radial-gradient(circle at 12% 18%, #dbe6f7 0%, transparent 45%),
+                     radial-gradient(circle at 88% 82%, #e2ecfb 0%, transparent 42%);
+    color:#0f1c2e;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .card {
+    width:1380px; background:#fff; border-radius:22px;
+    padding:58px 74px 54px;
+    box-shadow:0 26px 70px rgba(20,45,90,.16), 0 2px 6px rgba(20,45,90,.06);
+    border:1px solid #e4ebf5;
+  }
+  h1 { font-size:40px; font-weight:800; letter-spacing:-.5px; margin-bottom:8px; }
+  h1 em { font-style:normal; color:#1d4ed8; }
+  .sub { font-size:19px; color:#64748b; margin-bottom:38px; font-weight:500; }
+  .item { display:flex; gap:24px; padding:19px 0; border-top:1px solid #eef2f7; }
+  .item:first-of-type { border-top:none; }
+  .num {
+    flex:0 0 54px; height:54px; border-radius:14px;
+    background:#eff5ff; color:#1d4ed8;
+    font-size:23px; font-weight:800;
+    display:flex; align-items:center; justify-content:center;
+    font-variant-numeric:tabular-nums;
+  }
+  .body { flex:1; }
+  .t { font-size:25px; font-weight:700; letter-spacing:-.2px; margin-bottom:8px; }
+  .t .hl { color:#b42318; }
+  .d { font-size:17.5px; color:#5a6b82; line-height:1.72; }
+  .d code {
+    font-family:"SF Mono",Menlo,monospace; font-size:16px;
+    background:#f3f6fb; border:1px solid #e3eaf4; border-radius:5px;
+    padding:1px 7px; color:#334155;
+  }
+  .foot {
+    margin-top:34px; padding-top:22px; border-top:1px solid #eef2f7;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:16px; color:#8595ab;
+  }
+  .foot b { color:#334155; font-weight:600; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>这条 <em>86 秒</em> 的演示，背后是</h1>
+    <div class="sub">同样的流程能跑通一次，和能稳定跑通，是两件事</div>
+
+    <div class="item">
+      <div class="num">01</div>
+      <div class="body">
+        <div class="t">9 个候选数据源，实测 <span class="hl">6 个不可用</span></div>
+        <div class="d">百度新闻连续 5 次触发安全验证 · 企查查公开页被 WAF 拦截<br>
+          全国公共资源交易平台 502 · 中国招标投标公共服务平台需逆向抓包</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="num">02</div>
+      <div class="body">
+        <div class="t">财经门户是分词模糊匹配，噪音率 <span class="hl">99.7%</span></div>
+        <div class="d">搜「六维力传感器」会命中「赛<code>力</code>斯」——召回 733 条里只有 2 条能用</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="num">03</div>
+      <div class="body">
+        <div class="t">跨行业企业会从想不到的地方混进来</div>
+        <div class="d">「三星电机」（韩国半导体基板厂）靠<b>公司名里的「电机」二字</b>绕过整条行业相关性过滤</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="num">04</div>
+      <div class="body">
+        <div class="t">每一次「准确」，都是一条条实测结论换来的</div>
+        <div class="d">企业名抽不准就不抽、环节归不出就留白、口径没确认就不排序 —— 宁可少，不可错</div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <span>返投招商 Skill · 数据准确性与可追溯性设计说明</span>
+      <span><b>内部资料 · 请勿外传</b></span>
+    </div>
+  </div>
+</body>
+</html>

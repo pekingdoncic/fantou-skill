@@ -1,0 +1,27 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1600
+PlayResY: 900
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Hiragino Sans GB,31,&H00FFFFFF,&H000000FF,&HA0000000,&H00000000,0,0,0,0,100,100,0.4,0,3,7,0,2,80,80,46,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.30,0:00:04.20,Default,,0,0,0,,返投招商 Skill：输入「城市 + 产业目标」，自动生成招商线索池
+Dialogue: 0,0:00:06.75,0:00:10.35,Default,,0,0,0,,选择目标城市：深圳
+Dialogue: 0,0:00:10.25,0:00:13.85,Default,,0,0,0,,检索深度设为「重度」：覆盖全部数据源，回溯 730 天
+Dialogue: 0,0:00:13.75,0:00:15.65,Default,,0,0,0,,勾选「实时抓取在线数据」：从巨潮资讯、东方财富抓真实公告与媒体报道
+Dialogue: 0,0:00:15.85,0:00:17.25,Default,,0,0,0,,点击「运行 Skill」
+Dialogue: 0,0:00:17.38,0:00:22.11,Default,,0,0,0,,正在抓取真实数据…（约 38 秒，此处快放）
+Dialogue: 0,0:00:25.93,0:00:34.21,Default,,0,0,0,,① 产业链分析：按「强链 / 固链 / 延链 / 补链」拆解产业
+Dialogue: 0,0:00:34.81,0:00:43.48,Default,,0,0,0,,② 企业筛选：逐条标注证据等级与置信度；口径未确认时不做优先级排序
+Dialogue: 0,0:00:44.08,0:00:52.98,Default,,0,0,0,,③ 线索卡：触发信号 · 证据链接 · 风险提示 · 下一步动作
+Dialogue: 0,0:00:53.58,0:01:02.65,Default,,0,0,0,,④ 实时信号：数据从哪来 —— 公开源的原文标题与链接
+Dialogue: 0,0:01:03.25,0:01:08.60,Default,,0,0,0,,⑤ 数据源：3 个已接入，8 个规划中
+Dialogue: 0,0:01:09.20,0:01:14.74,Default,,0,0,0,,⑥ 城市政策：政策与返投口径独立配置，换城市不改代码
+Dialogue: 0,0:01:15.34,0:01:24.33,Default,,0,0,0,,⑦ 运行报告：耗时 · 请求数 · 证据守卫记录，全程可审计
+Dialogue: 0,0:01:24.53,0:01:26.73,Default,,0,0,0,,输出为线索池，不是决策结论。所有信息可溯源、可交叉验证
